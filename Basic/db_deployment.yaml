@@ -1,0 +1,30 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-deployment
+  labels: 
+    app: db
+spec:
+  minReadySeconds: 10
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25
+      maxUnavailable: 25
+  template:
+    metadata: 
+      name: db-pod
+      labels:
+        app: db
+  spec: 
+    containers:
+      - image: library/postgres:13-alpine
+        name: db-container
+        ports:
+          - containerPort: 5432
+            protocol: TCP          

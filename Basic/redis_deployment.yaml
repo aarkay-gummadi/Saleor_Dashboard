@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cache-deployment
+  labels: 
+    app: cache
+spec:
+  minReadySeconds: 10
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cache
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25
+      maxUnavailable: 25
+  template:
+    metadata: 
+      name: cache-pod
+      labels:
+        app: cache
+  spec: 
+    containers:
+      - image: library/redis:5.0-alpine
+        name: cache-container
+        ports:
+          - containerPort: 6379
+            protocol: TCP          
